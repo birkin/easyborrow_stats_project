@@ -19,12 +19,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DJ_TMPLT22__SECRET_KEY']
+SECRET_KEY = os.environ['EZB_STATS__SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = json.loads( os.environ['DJ_TMPLT22__DEBUG_JSON'] )  # will be True or False
+DEBUG = json.loads( os.environ['EZB_STATS__DEBUG_JSON'] )  # will be True or False
 
-ALLOWED_HOSTS = json.loads( os.environ['DJ_TMPLT22__ALLOWED_HOSTS_JSON'] )  # list
+ALLOWED_HOSTS = json.loads( os.environ['EZB_STATS__ALLOWED_HOSTS_JSON'] )  # list
 
 
 # Application definition
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'x_app',
+    'easyborrow_stats_app',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +51,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-template_dirs = json.loads( os.environ['DJ_TMPLT22__TEMPLATES_JSON'] )
+template_dirs = json.loads( os.environ['EZB_STATS__TEMPLATES_JSON'] )
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
-DATABASES = json.loads( os.environ['DJ_TMPLT22__DATABASES_JSON'] )
+DATABASES = json.loads( os.environ['EZB_STATS__DATABASES_JSON'] )
 
 
 # Password validation
