@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from x_app import views
+from easyborrow_stats_app import views
 
 
 urlpatterns = [
