@@ -1,12 +1,16 @@
 import datetime, json, logging
 
 from django.conf import settings as project_settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
+from easyborrow_stats_app.lib.stats_helper import Stats_Helper
 from easyborrow_stats_app.lib import version_helper
 
 
+
+
 log = logging.getLogger(__name__)
+stats_hlpr = Stats_Helper()
 
 
 # ===========================
@@ -19,7 +23,14 @@ def info( request ):
 
 
 def stats( request ):
-    return HttpResponse( 'stats response coming' )
+    log.debug( '\n\nstarting stats()' )
+    params_valid = stats_hlpr.validate_params( dict(request.GET) )
+    assert type( params_valid ) == bool
+    if params_valid:
+        resp = HttpResponse( 'stats response coming' )
+    else:
+        resp = HttpResponseBadRequest( 'invalid params' )
+    return resp
 
 
 def feed( request ):

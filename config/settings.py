@@ -132,9 +132,7 @@ STATIC_URL = '/static/'
 ## Email
 SERVER_EMAIL = 'easyborrow_stats@library.brown.edu'
 EMAIL_HOST = os.environ['EZB_STATS__EMAIL_HOST']
-print( f'EMAIL_HOST, ``{EMAIL_HOST}``' )
 EMAIL_PORT = int( os.environ['EZB_STATS__EMAIL_PORT'] )
-print( f'EMAIL_PORT, ``{EMAIL_PORT}``' )
 
 ## logging
 
