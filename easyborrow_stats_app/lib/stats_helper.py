@@ -1,4 +1,4 @@
-import datetime, logging
+import datetime, json, logging
 
 
 log = logging.getLogger(__name__)
@@ -51,6 +51,29 @@ class Stats_Helper():
             order_ok = True
         log.debug( f'order_ok, ``{order_ok}``' )
         return order_ok
+
+    def build_bad_param_message( self, scheme, host, path, querystring ):
+        """ Builds helpful bad-param text.
+            Called by views.stats() """
+        assert type(scheme) == str, type(scheme)
+        assert type(host) == str, type(host)
+        assert type(path) == str, type(path)
+        assert type(querystring) == str, type(querystring)
+        if querystring:
+            submitted_url = f'{scheme}://{host}{path}?{querystring}'
+        else:
+            submitted_url = f'{scheme}://{host}{path}'
+        log.debug( f'submitted_url, ``{submitted_url}``' )
+        data = {
+            'request': { 'url': submitted_url },
+            'response': {
+                'status': '400 / Bad Request',
+                'message': f'example url: {scheme}://{host}/easyborrow/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30'
+            }
+        }
+        jsn = json.dumps( data, sort_keys=True, indent=2 )
+        log.debug( f'jsn, ``{jsn}``' )
+        return jsn
 
 
 # date_time_str = '2018-06-29 08:15:27.243860'
