@@ -8,7 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import json, os
+import json, logging, os
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,6 +23,8 @@ SECRET_KEY = os.environ['EZB_STATS__SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = json.loads( os.environ['EZB_STATS__DEBUG_JSON'] )  # will be True or False
+
+ADMINS = json.loads( os.environ['EZB_STATS__ADMINS_JSON'] )
 
 ALLOWED_HOSTS = json.loads( os.environ['EZB_STATS__ALLOWED_HOSTS_JSON'] )  # list
 
@@ -125,3 +127,64 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+## Email
+SERVER_EMAIL = 'easyborrow_stats@library.brown.edu'
+EMAIL_HOST = os.environ['EZB_STATS__EMAIL_HOST']
+print( f'EMAIL_HOST, ``{EMAIL_HOST}``' )
+EMAIL_PORT = int( os.environ['EZB_STATS__EMAIL_PORT'] )
+print( f'EMAIL_PORT, ``{EMAIL_PORT}``' )
+
+## logging
+
+## disable module loggers
+# existing_logger_names = logging.getLogger().manager.loggerDict.keys()
+# print '- EXISTING_LOGGER_NAMES, `%s`' % existing_logger_names
+logging.getLogger('requests').setLevel( logging.WARNING )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(module)s-%(funcName)s()::%(lineno)d] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.FileHandler',  # note: configure server to use system's log-rotate to avoid permissions issues
+            'filename': os.environ['EZB_STATS__LOG_PATH'],
+            'formatter': 'standard',
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'easyborrow_stats_app': {
+            'handlers': ['logfile'],
+            'level': os.environ['EZB_STATS__LOG_LEVEL'],
+            'propagate': False
+        },
+        # 'django.db.backends': {  # re-enable to check sql-queries! <https://docs.djangoproject.com/en/1.11/topics/logging/#django-db-backends>
+        #     'handlers': ['logfile'],
+        #     'level': os.environ.get(u'BUL_CBP__LOG_LEVEL'),
+        #     'propagate': False
+        # },
+    }
+}

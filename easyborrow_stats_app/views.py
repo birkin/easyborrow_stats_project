@@ -1,9 +1,18 @@
-import datetime, json
+import datetime, json, logging
 
 from django.conf import settings as project_settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from easyborrow_stats_app.lib import version_helper
+
+
+log = logging.getLogger(__name__)
+
+
+# ===========================
+# main urls
+# ===========================
+
 
 def info(request):
     return HttpResponse("Hello, world. You're at the info page.")
@@ -22,12 +31,18 @@ def version( request ):
     info_txt = commit.replace( 'commit', branch )
     context = version_helper.make_context( request, rq_now, info_txt )
     output = json.dumps( context, sort_keys=True, indent=2 )
+    log.debug( f'output, ``{output}``' )
     return HttpResponse( output, content_type='application/json; charset=utf-8' )
 
 
 def error_check( request ):
-    """ For checking that admins receive error-emails. """
+    """ For an easy way to check that admins receive error-emails (in development).
+        To view error-emails in runserver-development:
+        - run, in another terminal window: `python -m smtpd -n -c DebuggingServer localhost:1026`,
+        - (or substitue your own settings for localhost:1026)
+    """
+    log.debug( f'project_settings.DEBUG, ``{project_settings.DEBUG}``' )
     if project_settings.DEBUG == True:
-        1/0
+        raise Exception( 'error-check triggered; admin emailed' )
     else:
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
