@@ -52,9 +52,10 @@ class Stats_Helper():
         log.debug( f'order_ok, ``{order_ok}``' )
         return order_ok
 
-    def build_bad_param_message( self, scheme, host, path, querystring ):
+    def build_bad_param_message( self, request_now_time, scheme, host, path, querystring ):
         """ Builds helpful bad-param text.
             Called by views.stats() """
+        assert type(request_now_time) == datetime.datetime
         assert type(scheme) == str, type(scheme)
         assert type(host) == str, type(host)
         assert type(path) == str, type(path)
@@ -65,10 +66,14 @@ class Stats_Helper():
             submitted_url = f'{scheme}://{host}{path}'
         log.debug( f'submitted_url, ``{submitted_url}``' )
         data = {
-            'request': { 'url': submitted_url },
+            'request': {
+                'url': submitted_url,
+                'timestamp': str( request_now_time )
+            },
             'response': {
                 'status': '400 / Bad Request',
-                'message': f'example url: {scheme}://{host}/easyborrow/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30'
+                'message': f'example url: {scheme}://{host}/easyborrow/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30',
+                'timetaken': str( datetime.datetime.now() - request_now_time )
             }
         }
         jsn = json.dumps( data, sort_keys=True, indent=2 )

@@ -23,13 +23,14 @@ def info( request ):
 
 def stats( request ):
     log.debug( '\n\nstarting stats()' )
+    request_now_time = datetime.datetime.now()
     stats_hlpr = Stats_Helper()
     params_valid = stats_hlpr.validate_params( dict(request.GET) )
     assert type( params_valid ) == bool
     if params_valid:
         resp = HttpResponse( 'stats response coming' )
     else:
-        message = stats_hlpr.build_bad_param_message( request.scheme, request.META['HTTP_HOST'], request.META['PATH_INFO'], request.META['QUERY_STRING'] )
+        message = stats_hlpr.build_bad_param_message( request_now_time, request.scheme, request.META['HTTP_HOST'], request.META['PATH_INFO'], request.META['QUERY_STRING'] )
         assert type(message) == str
         resp = HttpResponseBadRequest( message, content_type='application/json; charset=utf-8' )
     return resp
