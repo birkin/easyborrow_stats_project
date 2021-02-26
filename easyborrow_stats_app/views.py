@@ -14,8 +14,16 @@ log = logging.getLogger(__name__)
 # ===========================
 
 
-def info(request):
-    return HttpResponse("Hello, world. You're at the info page.")
+def info( request ):
+    return HttpResponse( 'Hello, world. You\'re at the info page.' )
+
+
+def stats( request ):
+    return HttpResponse( 'stats response coming' )
+
+
+def feed( request ):
+    return HttpResponse( 'feed response coming' )
 
 
 # ===========================
