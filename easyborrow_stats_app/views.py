@@ -30,7 +30,8 @@ def stats( request ):
     if params_valid:
         resp = HttpResponse( 'stats response coming' )
     else:
-        message = stats_hlpr.build_bad_param_message( request_now_time, request.scheme, request.META['HTTP_HOST'], request.META['PATH_INFO'], request.META['QUERY_STRING'] )
+        host = request.META.get( 'HTTP_HOST', '127.0.0.1' )  # HTTP_HOST doesn't exist for client-tests
+        message = stats_hlpr.build_bad_param_message( request_now_time, request.scheme, host, request.META['PATH_INFO'], request.META['QUERY_STRING'] )
         assert type(message) == str
         resp = HttpResponseBadRequest( message, content_type='application/json; charset=utf-8' )
     return resp
