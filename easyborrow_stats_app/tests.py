@@ -1,7 +1,7 @@
 import logging
 
 from django.test import TestCase
-from easyborrow_stats_app.lib.stats_helper import Stats_Helper
+from easyborrow_stats_app.lib.stats_helper import Validator
 
 
 log = logging.getLogger(__name__)
@@ -23,36 +23,36 @@ class ClientTest( TestCase ):
 
 
 
-class StatsHelperTest( TestCase ):
+class ValidatorTest( TestCase ):
     """ Checks stats_helper.py """
 
     def setUp(self):
-        self.stats_hlpr = Stats_Helper()
+        self.validator = Validator()
 
     def test_params_valid__no_params(self):
         """ Checks params handling; no params sent. """
         params = {}
-        self.assertEqual( False, self.stats_hlpr.validate_params( params ) )
-        self.assertEqual( '', self.stats_hlpr.start_date )
-        self.assertEqual( '', self.stats_hlpr.end_date )
+        self.assertEqual( False, self.validator.validate_params( params ) )
+        self.assertEqual( '', self.validator.start_date )
+        self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_but_invalid_date(self):
         """ Checks params handling; no params sent. """
         params = { 'start_date': 'foo', 'end_date': 'bar' }
-        self.assertEqual( False, self.stats_hlpr.validate_params( params ) )
-        self.assertEqual( '', self.stats_hlpr.start_date )
-        self.assertEqual( '', self.stats_hlpr.end_date )
+        self.assertEqual( False, self.validator.validate_params( params ) )
+        self.assertEqual( '', self.validator.start_date )
+        self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_and_out_of_order_dates(self):
         """ Checks params handling; no params sent. """
         params = { 'start_date': '2020-01-30', 'end_date': '2020-01-20' }
-        self.assertEqual( False, self.stats_hlpr.validate_params( params ) )
-        self.assertEqual( '', self.stats_hlpr.start_date )
-        self.assertEqual( '', self.stats_hlpr.end_date )
+        self.assertEqual( False, self.validator.validate_params( params ) )
+        self.assertEqual( '', self.validator.start_date )
+        self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_and_good_dates(self):
         """ Checks params handling; no params sent. """
         params = { 'start_date': '2020-01-20', 'end_date': '2020-01-30' }
-        self.assertEqual( True, self.stats_hlpr.validate_params( params ) )
-        self.assertEqual( '2020-01-20', self.stats_hlpr.start_date )
-        self.assertEqual( '2020-01-30', self.stats_hlpr.end_date )
+        self.assertEqual( True, self.validator.validate_params( params ) )
+        self.assertEqual( '2020-01-20', self.validator.start_date )
+        self.assertEqual( '2020-01-30', self.validator.end_date )
