@@ -16,6 +16,12 @@ class ClientTest( TestCase ):
         response = self.client.get( '/stats_api/v2/' )
         self.assertEqual( 400, response.status_code )  # HttpResponseBadRequest()
 
+    def test_feed(self):
+        """ Checks `/feeds/latest_items/`. """
+        response = self.client.get( '/feeds/latest_items/' )
+        self.assertEqual( 200, response.status_code )
+
+
 
 class StatsHelperTest( TestCase ):
     """ Checks stats_helper.py """
