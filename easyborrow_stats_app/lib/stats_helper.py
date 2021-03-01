@@ -4,7 +4,25 @@ import datetime, json, logging
 log = logging.getLogger(__name__)
 
 
-class Stats_Helper():
+class Prepper():
+    """ Prepares data. """
+
+    def __init__( self ):
+        pass
+
+    def manage_prep( self ):
+        ## get processed history entries
+        ## get history-entry counts by service-name
+        ## get requests entries
+        ## get relevant request-entry counts
+        pass
+
+    ## end Prepper()
+
+
+
+class Validator():
+    """ Checks params & handles bad request. """
 
     def __init__( self ):
         self.start_date = ''
@@ -79,26 +97,3 @@ class Stats_Helper():
         jsn = json.dumps( data, sort_keys=True, indent=2 )
         log.debug( f'jsn, ``{jsn}``' )
         return jsn
-
-
-# date_time_str = '2018-06-29 08:15:27.243860'
-# date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
-
-
-    # if u'start_date' not in get_params or u'end_date' not in get_params:  # not valid
-    #   url = u'%s://%s%s' % ( http_scheme, server_name, request_uri )
-    #   data = {
-    #     u'request': { u'url': url },
-    #     u'response': {
-    #       u'status': u'400 / Bad Request',
-    #       u'message': u'example url: http://%s/easyborrow/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30' % server_name,
-    #       }
-    #     }
-    #   self.output = json.dumps( data, sort_keys=True, indent=2 )
-    #   return False
-    # else:  # is valid
-    #   if u'detail' in get_params:
-    #     self.detail = get_params[u'detail']
-    #   self.date_start = u'%s 00:00:00' % get_params[u'start_date']
-    #   self.date_end = u'%s 23:59:59' % get_params[u'end_date']
-    #   return True

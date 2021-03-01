@@ -3,10 +3,8 @@ import datetime, json, logging
 from django.conf import settings as project_settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
-from easyborrow_stats_app.lib.stats_helper import Stats_Helper
+from easyborrow_stats_app.lib.stats_helper import Validator
 from easyborrow_stats_app.lib import version_helper
-
-
 
 
 log = logging.getLogger(__name__)
@@ -24,14 +22,16 @@ def info( request ):
 def stats( request ):
     log.debug( '\n\nstarting stats()' )
     request_now_time = datetime.datetime.now()
-    stats_hlpr = Stats_Helper()
-    params_valid = stats_hlpr.validate_params( dict(request.GET) )
+    validator = Validator()
+    prepper = Prepper()
+    params_valid = validator.validate_params( dict(request.GET) )
     assert type( params_valid ) == bool
     if params_valid:
+        data = prepper.make_data( request.GET['start_date'], request.GET['end_date'] )
         resp = HttpResponse( 'stats response coming' )
     else:
         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )  # HTTP_HOST doesn't exist for client-tests
-        message = stats_hlpr.build_bad_param_message( request_now_time, request.scheme, host, request.META['PATH_INFO'], request.META['QUERY_STRING'] )
+        message = validator.build_bad_param_message( request_now_time, request.scheme, host, request.META['PATH_INFO'], request.META['QUERY_STRING'] )
         assert type(message) == str
         resp = HttpResponseBadRequest( message, content_type='application/json; charset=utf-8' )
     return resp
