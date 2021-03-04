@@ -2,12 +2,10 @@ from django.contrib import admin
 from easyborrow_stats_app.models import RequestEntry, HistoryEntry
 
 
-
-
 # <https://docs.djangoproject.com/en/2.2/topics/db/multi-db/>
 
 class MultiDBModelAdmin(admin.ModelAdmin):
-    # A handy constant for the name of the alternate database.
+
     using = 'ezborrow_legacy'
 
     def save_model(self, request, obj, form, change):
@@ -35,32 +33,12 @@ class MultiDBModelAdmin(admin.ModelAdmin):
     ## end class MultiDBModelAdmin()
 
 
-
-
 # class RequestEntryAdmin(admin.ModelAdmin):
 class RequestEntryAdmin( MultiDBModelAdmin ):
 
-    using = 'ezborrow_legacy'
-
     list_display = [ 'title', 'wc_accession_num', 'create_date' ]
-    # list_filter = [
-    #     'project_contact_email',
-    #     'code_versioned',
-    #     'has_public_code_url',
-    #     'responsive',
-    #     'contains_lightweight_data_reporting',
-    #     'accessibility_check_run',
-    #     'data_discoverable',
-    #     'has_sitechecker_entry',
-    #     'framework_supported',
-    #     'https_enforced',
-    #     'admin_links_shib_protected',
-    #     'logs_rotated',
-    #     'patron_data_expiration_process',
-    #     'django_session_data_expired',
-    #     'emails_admin_on_error',
-    #     'vulnerabilities_fixed'
-    # ]
+    # list_filter = []
+
     ordering = [ 'title' ]
 
     readonly_fields = [ 'create_date' ]
@@ -69,7 +47,20 @@ class RequestEntryAdmin( MultiDBModelAdmin ):
 
     save_on_top = True
 
-    ## class TrackerAdmin()
-
+    ## end class RequestEntryAdmin()
 
 admin.site.register( RequestEntry, RequestEntryAdmin )
+
+
+class HistoryEntryAdmin( MultiDBModelAdmin ):
+
+    list_display = [ 'request', 'svc_name', 'svc_action', 'svc_result', 'note', 'working_timestamp' ]
+
+    readonly_fields = [ 'request' ]
+
+    save_on_top = True
+
+    ## end class HistoryEntryAdmin()
+
+admin.site.register( HistoryEntry, HistoryEntryAdmin )
+
