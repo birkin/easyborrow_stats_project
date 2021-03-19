@@ -35,7 +35,8 @@ def stats( request ):
         resp = HttpResponse( 'stats response coming' )
     else:
         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )  # HTTP_HOST doesn't exist for client-tests
-        message = validator.build_bad_param_message( request_now_time, request.scheme, host, request.META['PATH_INFO'], request.META['QUERY_STRING'] )
+        path = request.META.get('REQUEST_URI', request.META['PATH_INFO'] )
+        message = validator.build_bad_param_message( request_now_time, request.scheme, host, path, request.META['QUERY_STRING'] )
         assert type(message) == str
         resp = HttpResponseBadRequest( message, content_type='application/json; charset=utf-8' )
     return resp
