@@ -12,9 +12,14 @@ class ClientTest( TestCase ):
     """ Checks urls. """
 
     def test_stats_missing_params(self):
-        """ Checks `/stats_api/v2/`. """
+        """ Checks `/stats_api/v2/` with missing params. """
         response = self.client.get( '/stats_api/v2/' )
         self.assertEqual( 400, response.status_code )  # HttpResponseBadRequest()
+
+    def test_stats_good_params(self):
+        """ Checks `/stats_api/v2/` with good params. """
+        response = self.client.get( '/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30' )
+        self.assertEqual( 200, response.status_code )
 
     def test_feed(self):
         """ Checks `/feeds/latest_items/`. """
