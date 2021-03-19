@@ -1,4 +1,4 @@
-import logging
+import json, logging
 
 from django.test import TestCase
 from easyborrow_stats_app.lib.stats_helper import Validator
@@ -15,6 +15,11 @@ class ClientTest( TestCase ):
         """ Checks `/stats_api/v2/` with missing params. """
         response = self.client.get( '/stats_api/v2/' )
         self.assertEqual( 400, response.status_code )  # HttpResponseBadRequest()
+        resp_dct = json.loads( response.content )
+        self.assertEqual(
+            'http://127.0.0.1:8000/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30"',  # true for runserver
+            resp_dct['response']['message']
+            )
 
     def test_stats_good_params(self):
         """ Checks `/stats_api/v2/` with good params. """
