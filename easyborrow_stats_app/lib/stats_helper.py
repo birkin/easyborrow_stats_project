@@ -1,5 +1,5 @@
-import datetime, json, logging
-
+import datetime, json, logging, pprint
+from django.urls import reverse
 
 log = logging.getLogger(__name__)
 
@@ -10,12 +10,14 @@ class Prepper():
     def __init__( self ):
         pass
 
-    def manage_prep( self ):
+    def make_data( self, start_param, end_param ):
         ## get processed history entries
         ## get history-entry counts by service-name
         ## get requests entries
         ## get relevant request-entry counts
-        pass
+        data = {}
+        log.debug( f'data, ``{pprint.pformat(data)}``' )
+        return data
 
     ## end Prepper()
 
@@ -43,10 +45,12 @@ class Validator():
         log.debug( f'params_valid, ``{params_valid}``' )
         return params_valid
 
-    def good_date( self, submitted_date ):
+    def good_date( self, submitted_param ):
         """ Checks for valid date.
             Called by validate_params() """
-        assert type(submitted_date) == str
+        assert type(submitted_param) == list, type(submitted_param)
+        submitted_date = submitted_param[0]
+        assert type(submitted_date) == str, type(submitted_date)
         is_good_date = False
         try:
             datetime_obj = datetime.datetime.strptime( submitted_date, '%Y-%m-%d' )
@@ -57,9 +61,13 @@ class Validator():
         log.debug( f'is_good_date, ``{is_good_date}``' )
         return is_good_date
 
-    def date_order_ok( self, start_str, end_str ):
+    def date_order_ok( self, start_param, end_param ):
         """ Ensures start-date is less than end-date.
             Called by validate_params() """
+        assert type(start_param) == list
+        assert type(end_param) == list
+        start_str = start_param[0]
+        end_str = end_param[0]
         assert type(start_str) == str
         assert type(end_str) == str
         order_ok = False
