@@ -73,6 +73,8 @@ class Validator():
     def build_bad_param_message( self, request_now_time, scheme, host, path, querystring ):
         """ Builds helpful bad-param text.
             Called by views.stats() """
+        log.debug( f'scheme, ``{scheme}``; host, ``{host}``; path, ``{path}``; querystring, ``{querystring}``' )
+        log.debug( f'reverse("stats_api_v2_url"), ``{reverse("stats_api_v2_url")}``' )
         assert type(request_now_time) == datetime.datetime
         assert type(scheme) == str, type(scheme)
         assert type(host) == str, type(host)
@@ -90,7 +92,7 @@ class Validator():
             },
             'response': {
                 'status': '400 / Bad Request',
-                'message': f'example url: {scheme}://{host}/easyborrow/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30',
+                'message': f'example url: {scheme}://{host}{path}?start_date=2010-01-20&end_date=2010-01-30',
                 'timetaken': str( datetime.datetime.now() - request_now_time )
             }
         }
