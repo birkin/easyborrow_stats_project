@@ -17,7 +17,7 @@ class ClientTest( TestCase ):
         self.assertEqual( 400, response.status_code )  # HttpResponseBadRequest()
         resp_dct = json.loads( response.content )
         self.assertEqual(
-            'http://127.0.0.1:8000/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30"',  # true for runserver
+            'example url: http://127.0.0.1/stats_api/v2/?start_date=2010-01-20&end_date=2010-01-30',  # true for runserver _client_ test (no port)
             resp_dct['response']['message']
             )
 
@@ -30,7 +30,6 @@ class ClientTest( TestCase ):
         """ Checks `/feeds/latest_items/`. """
         response = self.client.get( '/feeds/latest_items/' )
         self.assertEqual( 200, response.status_code )
-
 
 
 class ValidatorTest( TestCase ):
