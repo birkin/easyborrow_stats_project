@@ -1,11 +1,11 @@
 import datetime, json, logging
 
 from django.conf import settings as project_settings
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
-from easyborrow_stats_app.lib.stats_helper import Validator, Prepper
+from django.urls import reverse
 from easyborrow_stats_app.lib import version_helper
-
+from easyborrow_stats_app.lib.stats_helper import Validator, Prepper
 
 log = logging.getLogger(__name__)
 
@@ -13,6 +13,10 @@ log = logging.getLogger(__name__)
 # ===========================
 # main urls
 # ===========================
+
+
+def root( request ):
+    return HttpResponseRedirect( reverse('info_url') )
 
 
 def info( request ):
