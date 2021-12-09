@@ -1,5 +1,8 @@
 import datetime, json, logging, pprint
+
 from django.urls import reverse
+from easyborrow_stats_app.models import HistoryEntry
+
 
 log = logging.getLogger(__name__)
 
@@ -8,16 +11,47 @@ class Prepper():
     """ Prepares data. """
 
     def __init__( self ):
-        pass
+        self.date_start = None
+        self.date_end = None
 
     def make_data( self, start_param, end_param ):
-        ## get processed history entries
-        ## get history-entry counts by service-name
-        ## get requests entries
-        ## get relevant request-entry counts
-        data = {}
-        log.debug( f'data, ``{pprint.pformat(data)}``' )
-        return data
+        try:
+            log.debug( f'start_param, ``{start_param}``' )
+            ## get processed history entries
+            assert type(start_param) == str
+            assert type(end_param) == str
+
+            # self.date_start = u'%s 00:00:00' % get_params[u'start_date']
+            # self.date_end = u'%s 23:59:59' % get_params[u'end_date']
+
+            self.date_start = f'{start_param} 00:00:00'
+            self.date_end = f'{end_param} 23:59:59'
+
+            # hist_ents = HistoryEntry.objects.using('ezborrow_legacy').all()
+
+            hist_ents = HistoryEntry.objects.using('ezborrow_legacy').filter(
+                working_timestamp__gte=self.date_start).filter(
+                working_timestamp__lte=self.date_end).filter(
+                svc_result__iexact=u'request_successful'
+            )
+
+            # hist_ents = HistoryEntry.objects.using('ezborrow_legacy').filter(
+            #     working_timestamp__gte=self.date_start).filter(
+            #     working_timestamp__lte=self.date_end).filter(
+            #     svc_result__iexact=u'request_successful'
+            # )
+            log.debug( f'hist_ents, ``{pprint.pformat(hist_ents)}``' )
+
+            ## get history-entry counts by service-name
+            ## get requests entries
+            ## get relevant request-entry counts
+            data = {}
+            log.debug( f'data, ``{pprint.pformat(data)}``' )
+            return data
+        except Exception as e:
+            msg = f'problem preparing data, ``{repr(e)}``'
+            log.exception( msg )
+            raise Exception( msg )
 
     ## end Prepper()
 

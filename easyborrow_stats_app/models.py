@@ -3,6 +3,8 @@ from django.db import models
 
 class RequestEntry(models.Model):
 
+    # using = 'ezborrow_legacy'
+
     TIMEPREF_CHOICES = (
         ('quick', 'Quick'),
         ('long', 'Long'),
@@ -52,6 +54,8 @@ class RequestEntry(models.Model):
 
 class HistoryEntry(models.Model):
 
+    # using = 'ezborrow_legacy'
+
     SERVICENAME_CHOICES = (
         ('inrhode', 'InRhode'),
         ('borrowdirect', 'BorrowDirect'),
@@ -64,7 +68,7 @@ class HistoryEntry(models.Model):
         ('skip', 'skip'),
         )
 
-    history_id = models.IntegerField(  primary_key=True )
+    id = models.IntegerField(  primary_key=True )
     # request = models.ForeignKey(Request)
     request = models.ForeignKey( RequestEntry, on_delete=models.CASCADE )  # so if a RequestEntry record is deleted, all associated history entries for that requestEntry will also be deleted.
     # request = models.ForeignKey(Request, edit_inline=models.TABULAR, num_in_admin=3)
