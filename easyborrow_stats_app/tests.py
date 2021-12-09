@@ -46,22 +46,23 @@ class ValidatorTest( TestCase ):
         self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_but_invalid_date(self):
-        """ Checks params handling; no params sent. """
-        params = { 'start_date': 'foo', 'end_date': 'bar' }
+        """ Checks params handling; date sent but invalid. """
+        # params = { 'start_date': 'foo', 'end_date': 'bar' }
+        params = { 'start_date': ['foo'], 'end_date': ['bar'] }
         self.assertEqual( False, self.validator.validate_params( params ) )
         self.assertEqual( '', self.validator.start_date )
         self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_and_out_of_order_dates(self):
-        """ Checks params handling; no params sent. """
-        params = { 'start_date': '2020-01-30', 'end_date': '2020-01-20' }
+        """ Checks params handling; good dates sent, but out-of-order. """
+        params = { 'start_date': ['2020-01-30'], 'end_date': ['2020-01-20'] }
         self.assertEqual( False, self.validator.validate_params( params ) )
         self.assertEqual( '', self.validator.start_date )
         self.assertEqual( '', self.validator.end_date )
 
     def test_params_valid__good_params_and_good_dates(self):
-        """ Checks params handling; no params sent. """
-        params = { 'start_date': '2020-01-20', 'end_date': '2020-01-30' }
+        """ Checks params handling; all good. """
+        params = { 'start_date': ['2020-01-20'], 'end_date': ['2020-01-30'] }
         self.assertEqual( True, self.validator.validate_params( params ) )
-        self.assertEqual( '2020-01-20', self.validator.start_date )
-        self.assertEqual( '2020-01-30', self.validator.end_date )
+        self.assertEqual( ['2020-01-20'], self.validator.start_date )
+        self.assertEqual( ['2020-01-30'], self.validator.end_date )

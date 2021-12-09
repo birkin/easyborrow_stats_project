@@ -34,6 +34,7 @@ class Validator():
         """ Checks for proper parameters & updates dates
             Called by views.stats() """
         log.debug( f'starting validate_request()' )
+        log.debug( f'params, ``{params}``; type(params), ``{type(params)}``' )
         assert type(params) == dict
         params_valid = False
         if 'start_date' in params.keys() and 'end_date' in params.keys():
