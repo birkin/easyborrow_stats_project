@@ -1,7 +1,7 @@
 import datetime, json, logging, pprint
 
 from django.urls import reverse
-from easyborrow_stats_app.models import HistoryEntry
+from easyborrow_stats_app.models import HistoryEntry, RequestEntry
 
 
 log = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class Prepper():
     def make_data( self, start_param, end_param ):
         try:
             log.debug( f'start_param, ``{start_param}``' )
-            ## get processed history entries
+            ## get processed history entries ------------------------
             assert type(start_param) == str
             assert type(end_param) == str
 
@@ -35,19 +35,58 @@ class Prepper():
                 svc_result__iexact=u'request_successful'
             )
 
-            # hist_ents = HistoryEntry.objects.using('ezborrow_legacy').filter(
-            #     working_timestamp__gte=self.date_start).filter(
-            #     working_timestamp__lte=self.date_end).filter(
-            #     svc_result__iexact=u'request_successful'
-            # )
             log.debug( f'hist_ents, ``{pprint.pformat(hist_ents)}``' )
 
-            ## get history-entry counts by service-name
-            ## get requests entries
-            ## get relevant request-entry counts
-            data = {}
-            log.debug( f'data, ``{pprint.pformat(data)}``' )
-            return data
+            ## get history-entry counts by service-name -------------
+            disposition_dict = {}
+            distinct_service_names = hist_ents.values( 'svc_name' ).order_by(u'svc_name').distinct()
+            for entry in distinct_service_names:
+                key = entry[u'svc_name']
+                value = hist_ents.filter(svc_name=key).count()
+                disposition_dict[key] = value
+
+            ## get requests entries ---------------------------------
+            requests = RequestEntry.objects.using('ezborrow_legacy').filter(
+                create_date__gte=self.date_start).filter(
+                create_date__lte=self.date_end
+                )
+            requests_total = requests.count()
+
+            ## get relevant request-entry counts --------------------
+            dispositional_request_statuses = [
+                'cancelled',
+                'illiad_block_user_em',
+                'illiad_block_user_emailed',
+                'in josiah',
+                'in_josiah',
+                'in_josiah_via_isbn',
+                'in_josiah_via_oclc',
+                'manually_processed'
+                ]
+            dispositions_all_total = 0
+            distinct_status_names = requests.values( u'request_status' ).order_by(u'request_status').distinct()
+            log.debug( f'distinct_status_names, ``{distinct_status_names}``' )
+            log.debug( f'type(distinct_status_names), ``{type(distinct_status_names)}``' )
+            for entry in distinct_status_names:
+                log.debug( f'entry, ``{entry}``' )
+                log.debug( f'type(entry), ``{type(entry)}``' )
+                key = entry[u'request_status']
+                value = requests.filter(request_status=key).count()
+                distinct_status_names[key] = value
+                if key in dispositional_request_statuses:
+                    disposition_dict[key] = value
+            for count in disposition_dict.values():
+                dispositions_all_total += count
+
+            ## build response ---------------------------------------
+            output_dict = { u'request': {}, u'response': {} }
+            output_dict['response'] = {
+              'disposition': disposition_dict,
+              'disposition_total': dispositions_all_total,
+              }
+            output = json.dumps( output_dict, indent=2 )
+            log.debug( f'output, ``{pprint.pformat(output)}``' )
+            return output
         except Exception as e:
             msg = f'problem preparing data, ``{repr(e)}``'
             log.exception( msg )
