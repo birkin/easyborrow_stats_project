@@ -53,6 +53,7 @@ class Prepper():
             requests_total = requests.count()
 
             ## get relevant request-entry counts --------------------
+            distinct_status_names = {}
             dispositional_request_statuses = [
                 'cancelled',
                 'illiad_block_user_em',
@@ -64,13 +65,11 @@ class Prepper():
                 'manually_processed'
                 ]
             dispositions_all_total = 0
-            distinct_status_names = requests.values( u'request_status' ).order_by(u'request_status').distinct()
-            log.debug( f'distinct_status_names, ``{distinct_status_names}``' )
-            log.debug( f'type(distinct_status_names), ``{type(distinct_status_names)}``' )
-            for entry in distinct_status_names:
+            distinct_status_names_qset = requests.values( u'request_status' ).order_by(u'request_status').distinct()
+            for entry in distinct_status_names_qset:
                 log.debug( f'entry, ``{entry}``' )
                 log.debug( f'type(entry), ``{type(entry)}``' )
-                key = entry[u'request_status']
+                key = entry['request_status']
                 value = requests.filter(request_status=key).count()
                 distinct_status_names[key] = value
                 if key in dispositional_request_statuses:
@@ -79,18 +78,38 @@ class Prepper():
                 dispositions_all_total += count
 
             ## build response ---------------------------------------
-            output_dict = { u'request': {}, u'response': {} }
-            output_dict['response'] = {
-              'disposition': disposition_dict,
-              'disposition_total': dispositions_all_total,
-              }
-            output = json.dumps( output_dict, indent=2 )
-            log.debug( f'output, ``{pprint.pformat(output)}``' )
+            output = self.build_response( dispositions_all_total, disposition_dict )
             return output
         except Exception as e:
             msg = f'problem preparing data, ``{repr(e)}``'
             log.exception( msg )
             raise Exception( msg )
+
+        ## end def make_data()
+
+    def build_response( self, dispositions_all_total, disposition_dict ):
+      output_dict = { u'request': {}, u'response': {} }
+      output_dict['request'] = {
+        'date_begin': self.date_start,
+        'date_end': self.date_end
+        }
+      if dispositions_all_total == 0:
+        output_dict['response'] = 'no data found for period'
+        output = json.dumps( output_dict, sort_keys=True, indent=2 )
+        return output
+      output_dict[u'response'] = {
+        'disposition': disposition_dict,
+        'disposition_total': dispositions_all_total,
+        }
+      # if self.detail == 'yes':
+      #   output_dict['response']['xtra'] = {
+      #     'request_statuses_found': self.distinct_status_names,
+      #     'request_statuses_counted': self.dispositional_request_statuses,
+      #     'requests_total': self.requests_total,
+      #     }
+      output = json.dumps( output_dict, indent=2 )
+      log.debug( f'output, ``{pprint.pformat(output)}``' )
+      return output
 
     ## end Prepper()
 
