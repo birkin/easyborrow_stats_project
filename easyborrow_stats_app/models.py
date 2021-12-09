@@ -18,6 +18,8 @@ class RequestEntry(models.Model):
         ('n', 'No'),
         )
 
+    id = models.IntegerField(  primary_key=True )
+
     title = models.CharField(max_length=255)
     isbn = models.CharField(max_length=13, blank=True)
     wc_accession_num = models.IntegerField()
@@ -62,6 +64,8 @@ class HistoryEntry(models.Model):
         ('attempt', 'attempt'),
         ('skip', 'skip'),
         )
+
+    history_id = models.IntegerField(  primary_key=True )
 
     # request = models.ForeignKey(Request)
     request = models.ForeignKey( RequestEntry, on_delete=models.CASCADE )  # so if a RequestEntry record is deleted, all associated history entries for that requestEntry will also be deleted.
