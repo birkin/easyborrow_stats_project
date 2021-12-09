@@ -48,11 +48,12 @@ class Validator():
     def good_date( self, submitted_param ):
         """ Checks for valid date.
             Called by validate_params() """
-        log.debug( f'submitted_param, ``{submitted_param}``' )
-        assert type(submitted_param) == str, type(submitted_param)
+        assert type(submitted_param) == list, type(submitted_param)
+        submitted_date = submitted_param[0]
+        assert type(submitted_date) == str, type(submitted_date)
         is_good_date = False
         try:
-            datetime_obj = datetime.datetime.strptime( submitted_param, '%Y-%m-%d' )
+            datetime_obj = datetime.datetime.strptime( submitted_date, '%Y-%m-%d' )
             assert type(datetime_obj) == datetime.datetime
             is_good_date = True
         except:
@@ -60,52 +61,22 @@ class Validator():
         log.debug( f'is_good_date, ``{is_good_date}``' )
         return is_good_date
 
-    # def good_date( self, submitted_param ):
-    #     """ Checks for valid date.
-    #         Called by validate_params() """
-    #     log.debug( f'submitted_param, ``{submitted_param}``' )
-    #     assert type(submitted_param) == str, type(submitted_param)
-    #     submitted_date = submitted_param[0]
-    #     assert type(submitted_date) == str, type(submitted_date)
-    #     is_good_date = False
-    #     try:
-    #         datetime_obj = datetime.datetime.strptime( submitted_date, '%Y-%m-%d' )
-    #         assert type(datetime_obj) == datetime.datetime
-    #         is_good_date = True
-    #     except:
-    #         log.exception( 'problem with date; processing continues' )
-    #     log.debug( f'is_good_date, ``{is_good_date}``' )
-    #     return is_good_date
-
     def date_order_ok( self, start_param, end_param ):
         """ Ensures start-date is less than end-date.
             Called by validate_params() """
-        assert type(start_param) == str
-        assert type(end_param) == str
+        assert type(start_param) == list
+        assert type(end_param) == list
+        start_str = start_param[0]
+        end_str = end_param[0]
+        assert type(start_str) == str
+        assert type(end_str) == str
         order_ok = False
-        start_dt_obj = datetime.datetime.strptime( start_param, '%Y-%m-%d' )
-        end_dt_obj = datetime.datetime.strptime( end_param, '%Y-%m-%d' )
+        start_dt_obj = datetime.datetime.strptime( start_str, '%Y-%m-%d' )
+        end_dt_obj = datetime.datetime.strptime( end_str, '%Y-%m-%d' )
         if start_dt_obj <= end_dt_obj:
             order_ok = True
         log.debug( f'order_ok, ``{order_ok}``' )
         return order_ok
-
-    # def date_order_ok( self, start_param, end_param ):
-    #     """ Ensures start-date is less than end-date.
-    #         Called by validate_params() """
-    #     assert type(start_param) == list
-    #     assert type(end_param) == list
-    #     start_str = start_param[0]
-    #     end_str = end_param[0]
-    #     assert type(start_str) == str
-    #     assert type(end_str) == str
-    #     order_ok = False
-    #     start_dt_obj = datetime.datetime.strptime( start_str, '%Y-%m-%d' )
-    #     end_dt_obj = datetime.datetime.strptime( end_str, '%Y-%m-%d' )
-    #     if start_dt_obj <= end_dt_obj:
-    #         order_ok = True
-    #     log.debug( f'order_ok, ``{order_ok}``' )
-    #     return order_ok
 
     def build_bad_param_message( self, request_now_time, scheme, host, path, querystring ):
         """ Builds helpful bad-param text.
