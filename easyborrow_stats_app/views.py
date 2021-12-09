@@ -32,7 +32,8 @@ def stats( request ):
     assert type( params_valid ) == bool
     if params_valid:
         data = prepper.make_data( request.GET['start_date'], request.GET['end_date'] )
-        resp = HttpResponse( 'stats response coming' )
+        # resp = HttpResponse( 'stats response coming' )
+        resp = HttpResponse( data, content_type='application/json; charset=utf-8' )
     else:
         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )  # HTTP_HOST doesn't exist for client-tests
         path = request.META.get('REQUEST_URI', request.META['PATH_INFO'] )
