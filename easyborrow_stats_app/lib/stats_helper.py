@@ -88,28 +88,28 @@ class Prepper():
         ## end def make_data()
 
     def build_response( self, dispositions_all_total, disposition_dict ):
-      output_dict = { u'request': {}, u'response': {} }
-      output_dict['request'] = {
-        'date_begin': self.date_start,
-        'date_end': self.date_end
-        }
-      if dispositions_all_total == 0:
-        output_dict['response'] = 'no data found for period'
-        output = json.dumps( output_dict, sort_keys=True, indent=2 )
+        output_dict = { u'request': {}, u'response': {} }
+        output_dict['request'] = {
+            'date_begin': self.date_start,
+            'date_end': self.date_end
+            }
+        if dispositions_all_total == 0:
+            output_dict['response'] = 'no data found for period'
+            output = json.dumps( output_dict, sort_keys=True, indent=2 )
+            return output
+        output_dict[u'response'] = {
+            'disposition': disposition_dict,
+            'disposition_total': dispositions_all_total,
+            }
+        # if self.detail == 'yes':
+        #     output_dict['response']['xtra'] = {
+        #         'request_statuses_found': self.distinct_status_names,
+        #         'request_statuses_counted': self.dispositional_request_statuses,
+        #         'requests_total': self.requests_total,
+        #         }
+        output = json.dumps( output_dict, indent=2 )
+        log.debug( f'output, ``{pprint.pformat(output)}``' )
         return output
-      output_dict[u'response'] = {
-        'disposition': disposition_dict,
-        'disposition_total': dispositions_all_total,
-        }
-      # if self.detail == 'yes':
-      #   output_dict['response']['xtra'] = {
-      #     'request_statuses_found': self.distinct_status_names,
-      #     'request_statuses_counted': self.dispositional_request_statuses,
-      #     'requests_total': self.requests_total,
-      #     }
-      output = json.dumps( output_dict, indent=2 )
-      log.debug( f'output, ``{pprint.pformat(output)}``' )
-      return output
 
     ## end Prepper()
 
