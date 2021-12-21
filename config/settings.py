@@ -123,10 +123,8 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_URL = os.environ['EZB_STATS__STATIC_URL']
+STATIC_ROOT = os.environ['EZB_STATS__STATIC_ROOT']  # needed for collectstatic command
 
 
 ## Email
