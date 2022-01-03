@@ -36,12 +36,12 @@ class MultiDBModelAdmin(admin.ModelAdmin):
 # class RequestEntryAdmin(admin.ModelAdmin):
 class RequestEntryAdmin( MultiDBModelAdmin ):
 
-    list_display = [ 'title', 'wc_accession_num', 'create_date' ]
+    list_display = [ 'title', 'wc_accession_num', 'created' ]
     # list_filter = []
 
     ordering = [ 'title' ]
 
-    readonly_fields = [ 'create_date' ]
+    readonly_fields = [ 'created' ]
 
     # prepopulated_fields = { "slug": ("project_name",) }
 

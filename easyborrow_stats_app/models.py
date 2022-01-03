@@ -40,7 +40,7 @@ class RequestEntry(models.Model):
     patron_email = models.CharField(max_length=50, blank=True)
     patron_group = models.CharField(max_length=20, blank=True)
     request_status = models.CharField(max_length=30, default='Not_Yet_Processed')
-    create_date = models.DateTimeField(null=True, blank=True)
+    created = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str( self.id ) + ' ::: ' + self.title

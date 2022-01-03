@@ -47,8 +47,8 @@ class Prepper():
 
             ## get requests entries ---------------------------------
             requests = RequestEntry.objects.using('ezborrow_legacy').filter(
-                create_date__gte=self.date_start).filter(
-                create_date__lte=self.date_end
+                created__gte=self.date_start).filter(
+                created__lte=self.date_end
                 )
             requests_total = requests.count()
 
