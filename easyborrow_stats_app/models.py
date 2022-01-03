@@ -69,7 +69,7 @@ class HistoryEntry(models.Model):
         ('skip', 'skip'),
         )
 
-    id = models.IntegerField(  primary_key=True )
+    history_id = models.IntegerField(  primary_key=True )
     # request = models.ForeignKey(Request)
     request = models.ForeignKey( RequestEntry, on_delete=models.CASCADE )  # so if a RequestEntry record is deleted, all associated history entries for that requestEntry will also be deleted.
     # request = models.ForeignKey(Request, edit_inline=models.TABULAR, num_in_admin=3)
