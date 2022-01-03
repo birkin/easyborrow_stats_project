@@ -47,7 +47,8 @@ class RequestEntry(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'stats_app_request'
+        # db_table = 'stats_app_request'
+        db_table = 'requests'
 
     ## end RequestEntry()
 
@@ -86,6 +87,7 @@ class HistoryEntry(models.Model):
     class Meta:
         managed = False
         verbose_name_plural = 'history entries'
-        db_table = 'stats_app_historyentry'
+        # db_table = 'stats_app_historyentry'
+        db_table = 'history'
 
     ## end HistoryEntry()
