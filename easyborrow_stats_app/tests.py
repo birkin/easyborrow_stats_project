@@ -1,6 +1,8 @@
 import json, logging
 
+from django.conf import settings as project_settings
 from django.test import TestCase
+from django.test.utils import override_settings
 from easyborrow_stats_app.lib.stats_helper import Validator
 
 
@@ -31,6 +33,23 @@ class ClientTest( TestCase ):
         """ Checks `/feeds/latest_items/`. """
         response = self.client.get( '/feeds/latest_items/' )
         self.assertEqual( 200, response.status_code )
+
+    @override_settings(DEBUG=True)  # for tests, DEBUG is normally autoset to False
+    def test_dev_errorcheck(self):
+        """ Checks that dev error_check url triggers error.. """
+        log.debug( f'debug, ``{project_settings.DEBUG}``' )
+        try:
+            log.debug( 'about to initiate client.get()' )
+            response = self.client.get( '/error_check/' )
+        except Exception as e:
+            log.debug( f'e, ``{repr(e)}``' )
+            self.assertEqual( "ZeroDivisionError('division by zero')", repr(e) )
+
+    def test_prod_errorcheck(self):
+        """ Checks that production error_check url returns 404. """
+        log.debug( f'debug, ``{project_settings.DEBUG}``' )
+        response = self.client.get( '/error_check/' )
+        self.assertEqual( 404, response.status_code )
 
 
 class ValidatorTest( TestCase ):
