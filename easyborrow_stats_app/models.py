@@ -23,22 +23,22 @@ class RequestEntry(models.Model):
     id = models.IntegerField(  primary_key=True )
     title = models.CharField(max_length=255)
     isbn = models.CharField(max_length=13, blank=True)
-    wc_accession_num = models.IntegerField()
-    bib_num = models.CharField(max_length=10, blank=True)
-    time_pref = models.CharField(max_length=5, choices=TIMEPREF_CHOICES, default='quick')
-    location = models.CharField(max_length=4, choices=LOCATION_CHOICES, default='rock')
-    alternate_edition = models.CharField(max_length=1, choices=YESNO_CHOICES, default='y')
+    wc_accession = models.IntegerField()
+    bibno = models.CharField(max_length=10, blank=True)
+    pref = models.CharField(max_length=5, choices=TIMEPREF_CHOICES, default='quick')    # 'time_pref' in copy
+    loc = models.CharField(max_length=4, choices=LOCATION_CHOICES, default='rock')      # 'location' in copy
+    alt_edition = models.CharField(max_length=1, choices=YESNO_CHOICES, default='y')    # 'alternate_edition' in copy
     # time_pref = models.CharField(max_length=5, choices=TIMEPREF_CHOICES, radio_admin=True, default='quick')
     # location = models.CharField(max_length=4, choices=LOCATION_CHOICES, radio_admin=True, default='rock')
     # alternate_edition = models.CharField(max_length=1, choices=YESNO_CHOICES, radio_admin=True, default='y')
     volumes = models.CharField(max_length=255, blank=True)
     sfxurl = models.TextField()
-    patron_id = models.CharField(max_length=7, blank=True)
-    patron_firstname = models.CharField(max_length=120, blank=True)
-    patron_lastname = models.CharField(max_length=120, blank=True)
-    patron_barcode = models.CharField(max_length=14, blank=True)
-    patron_email = models.CharField(max_length=50, blank=True)
-    patron_group = models.CharField(max_length=20, blank=True)
+    patronid = models.CharField(max_length=7, blank=True)                               # 'patron_id' in copy
+    firstname = models.CharField(max_length=120, blank=True)                            # 'patron_firstname' in copy
+    lastname = models.CharField(max_length=120, blank=True)                             # 'patron_lastname' in copy
+    barcode = models.CharField(max_length=14, blank=True)                               # 'patron_barcode' in copy
+    email = models.CharField(max_length=50, blank=True)                                 # 'patron_email' in copy
+    group = models.CharField(max_length=20, blank=True)                                 # 'patron_group' in copy
     request_status = models.CharField(max_length=30, default='Not_Yet_Processed')
     created = models.DateTimeField(null=True, blank=True)
 

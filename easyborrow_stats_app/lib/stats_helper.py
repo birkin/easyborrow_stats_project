@@ -36,12 +36,13 @@ class Prepper():
             )
 
             log.debug( f'hist_ents, ``{pprint.pformat(hist_ents)}``' )
+            log.debug( f'len(hist_ents), ``{len(hist_ents)}``' )
 
             ## get history-entry counts by service-name -------------
             disposition_dict = {}
-            distinct_service_names = hist_ents.values( 'svc_name' ).order_by(u'svc_name').distinct()
+            distinct_service_names = hist_ents.values( 'svc_name' ).order_by('svc_name').distinct()
             for entry in distinct_service_names:
-                key = entry[u'svc_name']
+                key = entry['svc_name']
                 value = hist_ents.filter(svc_name=key).count()
                 disposition_dict[key] = value
 
