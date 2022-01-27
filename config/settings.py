@@ -120,8 +120,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+# USE_TZ = True
+USE_TZ = False  # odd, but doing this to get at the legacy db's history-entry mysql timestamps more literally
 
 STATIC_URL = os.environ['EZB_STATS__STATIC_URL']
 STATIC_ROOT = os.environ['EZB_STATS__STATIC_ROOT']  # needed for collectstatic command

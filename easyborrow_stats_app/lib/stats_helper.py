@@ -16,27 +16,23 @@ class Prepper():
 
     def make_data( self, start_param, end_param ):
         try:
-            log.debug( f'start_param, ``{start_param}``' )
+            log.debug( 'starting make_data()' )
+
             ## get processed history entries ------------------------
             assert type(start_param) == str
             assert type(end_param) == str
-
-            # self.date_start = u'%s 00:00:00' % get_params[u'start_date']
-            # self.date_end = u'%s 23:59:59' % get_params[u'end_date']
-
             self.date_start = f'{start_param} 00:00:00'
             self.date_end = f'{end_param} 23:59:59'
-
-            # hist_ents = HistoryEntry.objects.using('ezborrow_legacy').all()
-
+            log.debug( f'self.date_start, ``{self.date_start}``')
+            log.debug( f'self.date_end, ``{self.date_end}``')
             hist_ents = HistoryEntry.objects.using('ezborrow_legacy').filter(
-                working_timestamp__gte=self.date_start).filter(
-                working_timestamp__lte=self.date_end).filter(
-                svc_result__iexact=u'request_successful'
-            )
-
-            log.debug( f'hist_ents, ``{pprint.pformat(hist_ents)}``' )
+                    working_timestamp__gte=self.date_start).filter(
+                    working_timestamp__lte=self.date_end).filter(
+                    svc_result__iexact=u'request_successful'
+                ).order_by('working_timestamp')
             log.debug( f'len(hist_ents), ``{len(hist_ents)}``' )
+            # for hist_ent in hist_ents:
+            #     log.debug( f'hist_ent.working_timestamp, ``{hist_ent.working_timestamp}``')
 
             ## get history-entry counts by service-name -------------
             disposition_dict = {}
