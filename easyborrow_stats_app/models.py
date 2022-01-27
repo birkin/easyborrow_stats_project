@@ -40,7 +40,7 @@ class RequestEntry(models.Model):
     email = models.CharField(max_length=50, blank=True)                                 # 'patron_email' in copy
     group = models.CharField(max_length=20, blank=True)                                 # 'patron_group' in copy
     request_status = models.CharField(max_length=30, default='Not_Yet_Processed')
-    created = models.DateTimeField(null=True, blank=True)
+    created = models.DateTimeField(blank=True)
 
     def __str__(self):
         return str( self.id ) + ' ::: ' + self.title
