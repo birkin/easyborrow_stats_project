@@ -41,8 +41,9 @@ class RequestEntryAdmin( MultiDBModelAdmin ):
 
     # list_filter = [ 'created' ]
 
-    date_hierarchy = 'created'
+    # date_hierarchy = 'created'  # generates error: "Database returned an invalid datetime value. Are time zone definitions for your database installed?"
 
+    search_fields = [ 'created']
 
     ordering = [ 'title' ]
 
