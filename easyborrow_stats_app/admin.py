@@ -36,9 +36,13 @@ class MultiDBModelAdmin(admin.ModelAdmin):
 # class RequestEntryAdmin(admin.ModelAdmin):
 class RequestEntryAdmin( MultiDBModelAdmin ):
 
-    list_display = [ 'id', 'title', 'created', 'firstname', 'group', 'request_status' ]
+    list_display = [ 'id', 'title', 'created', 'barcode', 'request_status' ]
     # list_display = [ 'title', 'wc_accession', 'created' ]
-    # list_filter = []
+
+    # list_filter = [ 'created' ]
+
+    date_hierarchy = 'created'
+
 
     ordering = [ 'title' ]
 
