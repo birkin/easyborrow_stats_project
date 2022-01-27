@@ -36,7 +36,8 @@ class MultiDBModelAdmin(admin.ModelAdmin):
 # class RequestEntryAdmin(admin.ModelAdmin):
 class RequestEntryAdmin( MultiDBModelAdmin ):
 
-    list_display = [ 'title', 'wc_accession', 'created' ]
+    list_display = [ 'id', 'title', 'created', 'firstname', 'group', 'request_status' ]
+    # list_display = [ 'title', 'wc_accession', 'created' ]
     # list_filter = []
 
     ordering = [ 'title' ]
